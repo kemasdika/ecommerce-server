@@ -3,9 +3,11 @@ const router = express.Router()
 
 const {ProductController} = require('../controllers/productController')
 const {authorize} = require('../middlewares/auth')
+const {authenticate} = require('../middlewares/auth')
 
 router.get('/products',ProductController.getProduct)
 router.get('/products/:id',ProductController.getProductId)
+router.use(authenticate)
 router.post('/products',authorize,ProductController.createProduct)
 router.put('/products/:id',authorize,ProductController.editProduct)
 router.patch('/products/:id',authorize,ProductController.updateProduct)

@@ -67,7 +67,7 @@ _Response (200 - Ok)_
 }
 ```
 
-_Response (401 - Bad Request - Invalid Account or Password)_
+_Response (401 - Bad Request - invalid email and password)_
 
 ```
 {
@@ -80,6 +80,59 @@ _Response (400 - Bad Request - Email & Password cannot be Null)_
 ```
 {
     "message": 'Email or Password is required'
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## POST /loginCustomer
+
+_Request Body_
+
+```
+{
+    (REQUIRED) "email": "customer@gmail.com",
+    (REQUIRED) "password": "123456"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "access_token": "/ token from login /"
+}
+```
+
+_Response (401 - Not Authorized - invalid email and password)_
+
+```
+{
+    "message": "invalid email and password"
+}
+```
+
+_Response (400 - Bad Request - Email & Password cannot be Null)_
+
+```
+{
+    "message": 'Email or Password Cannot be Empty'
+}
+```
+
+_Response (401 - Not Authorized - User Role not 'customer')_
+
+```
+{
+    "message": "This Site is For Customer Only"
 }
 ```
 
@@ -508,3 +561,442 @@ _Response (500 - Internal Server Error)_
 ```
 
 ---
+
+## GET /carts
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "data": [
+        {
+            "id": 5,
+            "UserId": 2,
+            "ProductId": 3,
+            "quantity": 2,
+            "updatedAt": "2021-01-23T07:16:00.459Z",
+            "createdAt": "2021-01-23T07:16:00.459Z",
+            "Product": {
+                "id": 3,
+                "name": "Tas",
+                "image_url": "gambar",
+                "price": 40000,
+                "stock": 5,
+                "updatedAt": "2021-01-23T07:16:00.459Z",
+                "createdAt": "2021-01-23T07:16:00.459Z",
+            }
+        },
+        {
+            "id": 6,
+            "UserId": 2,
+            "ProductId": 4,
+            "quantity": 4,
+            "updatedAt": "2021-01-23T07:16:00.459Z",
+            "createdAt": "2021-01-23T07:16:00.459Z",
+            "Product": {
+                "id": 4,
+                "name": "baju",
+                "image_url": "gambar",
+                "price": 35000,
+                "stock": 4,
+                "updatedAt": "2021-01-23T07:16:00.459Z",
+                "createdAt": "2021-01-23T07:16:00.459Z",
+            }
+        }
+    ],
+    "total": 220000
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## POST /carts/:productId
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "response": {
+        "id": 19,
+        "UserId": 5,
+        "ProductId": 5,
+        "quantity": 2,
+        "updatedAt": "2021-01-23T07:16:00.459Z",
+        "createdAt": "2021-01-23T07:16:00.459Z"
+    },
+    "message": "Your Cart is Updated"
+}
+```
+
+_Response (400 - Bad Request - Not Enough Stock)_
+
+```
+{
+    "message": "This Products Stocks is Not Enough"
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## PATCH /carts/:cartId
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "response": {
+        "id": 6,
+        "UserId": 2,
+        "ProductId": 4,
+        "quantity": 2,
+        "updatedAt": "2021-01-23T07:16:00.459Z",
+        "createdAt": "2021-01-23T07:16:00.459Z"
+    },
+    "message": "Your Cart is Updated"
+}
+```
+
+_Response (404 - Not Found - Cart Not Found)_
+
+```
+{
+    "message": "Cart Not Found"
+}
+```
+
+_Response (400 - Bad Request - Quantity Cart on Minimum)_
+
+```
+{
+    "message": "This Cart Quantity is Already One, Please use Remove Cart to Delete It
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## DELETE /carts/:cartId
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "message": "This Item has Been Removed"
+}
+```
+
+_Response (404 - Not Found - Cart Not Found)_
+
+```
+{
+    "message": "Cart Not Found"
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## GET /wishlists
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    [
+        {
+            "id": 14,
+            "UserId": 2,
+            "ProductId": 3,
+            "updatedAt": "2021-01-23T07:16:00.459Z",
+            "createdAt": "2021-01-23T07:16:00.459Z",
+            "Product": {
+                "id": 3,
+                "name": "Tas",
+                "image_url": "gambar",
+                "price": 40000,
+                "stock": 5,
+                "updatedAt": "2021-01-23T07:16:00.459Z",
+                "createdAt": "2021-01-23T07:16:00.459Z",
+            }
+        },
+        {
+            "id": 17,
+            "UserId": 2,
+            "ProductId": 5,
+            "updatedAt": "2021-01-23T07:16:00.459Z",
+            "createdAt": "2021-01-23T07:16:00.459Z",
+            "Product": {
+                "id": 5,
+                "name": "baju",
+                "image_url": "gambar",
+                "price": 105000,
+                "stock": 12,
+                "createdAt": "2020-12-09T13:49:53.634Z",
+                "updatedAt": "2020-12-10T05:39:47.588Z"
+            }
+        }
+    ]
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## POST /wishlists/:productId
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "message": "Success add this Product to Your Wishlist"
+}
+```
+
+_Response (400 - Bad Request - Already Have this Wishlist)_
+
+```
+{
+    "message": "You are Already Add This Product to Your Wishlist"
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
+
+---
+
+## DELETE /wishlists/:wishId
+
+_Request Headers_
+
+```
+{
+    (REQUIRED) "access_token": "/token from login/"
+}
+```
+
+_Response (200 - Ok)_
+
+```
+{
+    "message": "Success Remove this Product from Your Wishlist"
+}
+```
+
+_Response (404 - Not Found - Wishlist Not Found)_
+
+```
+{
+    "message": "This Wishlist Not Found"
+}
+```
+
+_Response (401 - Unauthorized - No Access Token)_
+
+```
+{
+    "message": "Please Login First"
+}
+```
+
+_Response (401 - Unauthorized - Invalid Access Token)_
+
+```
+{
+    "message": "Invalid email or password"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```
+{
+    "message": "Internal Server Error"
+}
+```
